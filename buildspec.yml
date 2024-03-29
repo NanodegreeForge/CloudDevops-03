@@ -9,6 +9,9 @@ phases:
     commands:
       - docker build -t coworking:latest .
       - docker tag coworking:latest 323571328978.dkr.ecr.us-west-2.amazonaws.com/coworking:latest      
+      - docker tag coworking:latest 323571328978.dkr.ecr.us-west-2.amazonaws.com/coworking:1.0.${CODEBUILD_BUILD_NUMBER} 
   post_build:
     commands:
       - docker push 323571328978.dkr.ecr.us-west-2.amazonaws.com/coworking:latest
+      - docker push 323571328978.dkr.ecr.us-west-2.amazonaws.com/coworking:1.0.${CODEBUILD_BUILD_NUMBER} 
+
