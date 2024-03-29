@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: coworking
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     service: coworking
   ports:
@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: coworking
-        image: <DOCKER_IMAGE_NAME>:<IMAGE_TAG>
+        image: 323571328978.dkr.ecr.us-west-2.amazonaws.com/coworking:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -44,18 +44,13 @@ spec:
             port: 5153
           initialDelaySeconds: 5
           timeoutSeconds: 5
+        envFrom:
+        - configMapRef:
+            name: coworking-config
         env:
-        - name: DB_HOST
-          value: <SERVICE_NAME>-postgresql
-        - name: DB_PORT
-          value: "5432"
-        - name: DB_USERNAME
-          value: postgres
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: <SERVICE_NAME>-postgresql
-              key: postgres-password
-        - name: DB_NAME
-          value: postgres
+              name: db-password
+              key: DB_PASSWORD
       restartPolicy: Always

@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - aws --version
+      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 323571328978.dkr.ecr.us-west-2.amazonaws.com
+  build:
+    commands:
+      - docker build -t coworking:latest .
+      - docker tag coworking:latest 323571328978.dkr.ecr.us-west-2.amazonaws.com/coworking:latest      
+  post_build:
+    commands:
+      - docker push 323571328978.dkr.ecr.us-west-2.amazonaws.com/coworking:latest
